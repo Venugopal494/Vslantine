@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Valentine</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    height: 100vh;
+    background: radial-gradient(circle at top, #ffd6dc, #f6a7b3);
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+/* Card */
+.card {
+    width: 460px;
+    padding: 40px 28px;
+    border-radius: 26px;
+    background: rgba(255, 255, 255, 0.35);
+    backdrop-filter: blur(14px);
+    box-shadow: 0 25px 45px rgba(0,0,0,0.15);
+    text-align: center;
+}
+
+h1 {
+    font-size: 24px;
+    color: #8b0033;
+    margin-bottom: 42px;
+}
+
+/* BIG BUTTON AREA */
+.buttons {
+    position: relative;
+    width: 100%;
+    height: 260px;
+}
+
+/* Common button */
+button {
+    border: none;
+    padding: 14px 26px;
+    font-size: 15px;
+    border-radius: 30px;
+    font-weight: 500;
+}
+
+/* YES */
+#yes {
+    background: linear-gradient(135deg, #ff4b6e, #ff6a88);
+    color: #fff;
+    cursor: pointer;
+    box-shadow: 0 10px 25px rgba(255, 75, 110, 0.45);
+    position: absolute;
+    left: 70px;   /* side by side */
+    top: 20px;
+    z-index: 2;
+}
+
+/* NO */
+#no {
+    position: absolute;
+    width: 90px;
+    height: 44px;
+    background: rgba(255,255,255,0.85);
+    color: #8b0033;
+    cursor: default;
+    left: 250px;  /* side by side */
+    top: 20px;
+}
+
+/* Text */
+.text {
+    font-size: 14px;
+    color: #5a0022;
+    line-height: 1.6;
+}
+
+/* Success */
+.success { display: none; }
+
+/* Floating Hearts */
+.heart {
+    position: fixed;
+    bottom: -20px;
+    font-size: 20px;
+    animation: floatUp 6s linear forwards;
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+@keyframes floatUp {
+    from {
+        transform: translateY(0) scale(1);
+        opacity: 0.8;
+    }
+    to {
+        transform: translateY(-110vh) scale(1.6);
+        opacity: 0;
+    }
+}
+</style>
+</head>
+<body>
+
+<div id="card" class="card">
+    <h1>Will you be my Valentine? ❤️</h1>
+
+    <div id="area" class="buttons">
+        <button id="yes" onclick="accept()">Yes, of course 💖</button>
+        <button id="no">No</button>
+    </div>
+
+    <div class="text">
+        <p>
+            You are the reason my heart smiles 💕<br>
+            Every moment feels special with you ✨
+        </p>
+        <p>
+            నువ్వంటే ఎందుకు ఇష్టమో చెప్పలేను..<br>
+            కానీ ఎంతిష్టమో చెప్పగలను! 💖❤️
+        </p>
+    </div>
+</div>
+
+<div id="success" class="card success">
+    <h1>Yay! 💕</h1>
+    <div class="text">
+        <p>
+            You just made my heart the happiest ❤️<br>
+            Forever starts with this moment ✨
+        </p>
+        <p>
+            నేను పడుకోబోయే ముందు చివరి ఆలోచన 💖<br>
+            లేచాక మొదటి ఆలోచన నువ్వే ❤️
+        </p>
+    </div>
+</div>
+
+<script>
+const noBtn = document.getElementById("no");
+const area = document.getElementById("area");
+const SAFE_DISTANCE = 120;
+
+/* Cursor protection */
+area.addEventListener("mousemove", (e) => {
+    const rect = noBtn.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    const dist = Math.hypot(e.clientX - cx, e.clientY - cy);
+    if (dist < SAFE_DISTANCE) moveNo();
+});
+
+/* Mobile protection */
+area.addEventListener("touchmove", moveNo);
+
+function moveNo() {
+    const maxX = area.clientWidth - noBtn.offsetWidth;
+    const maxY = area.clientHeight - noBtn.offsetHeight;
+
+    noBtn.style.left = Math.random() * maxX + "px";
+    noBtn.style.top  = (60 + Math.random() * (maxY - 60)) + "px";
+}
+
+/* Floating hearts */
+setInterval(createHeart, 600);
+
+function createHeart() {
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    heart.innerHTML = "❤️";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.animationDuration = (4 + Math.random() * 3) + "s";
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 7000);
+}
+
+/* YES */
+function accept() {
+    document.getElementById("card").style.display = "none";
+    document.getElementById("success").style.display = "block";
+    for (let i = 0; i < 10; i++) {
+        setTimeout(createHeart, i * 200);
+    }
+}
+</script>
+
+</body>
+</html>
